@@ -4,6 +4,8 @@
 
 Se ha consolidado exitosamente los 3 repositorios independientes (FAISS, Pinecone, Weaviate) en un **solo repositorio unificado** con estructura modular.
 
+**Estado**: ✅ Repositorio subido a GitHub: https://github.com/joedayz/rag-vector-stores-comparison
+
 ## 📁 Nueva Estructura
 
 ```
