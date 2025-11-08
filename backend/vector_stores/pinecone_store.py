@@ -3,7 +3,7 @@ Implementación de Pinecone vector store
 """
 import os
 from typing import List
-from langchain_pinecone import PineconeVectorStore
+from langchain_pinecone import PineconeVectorStore as LangChainPineconeVectorStore
 from langchain_core.documents import Document
 from .base import VectorStoreBase
 from config import (
@@ -39,7 +39,7 @@ class PineconeVectorStore(VectorStoreBase):
                 return
             
             # Intentar conectar al índice
-            self.vectordb = PineconeVectorStore(
+            self.vectordb = LangChainPineconeVectorStore(
                 index_name=PINECONE_INDEX_NAME,
                 embedding=self.embeddings
             )
@@ -100,7 +100,7 @@ class PineconeVectorStore(VectorStoreBase):
         
         # Crear vectorstore en Pinecone
         # from_documents acepta embedding (singular) como segundo argumento posicional
-        self.vectordb = PineconeVectorStore.from_documents(
+        self.vectordb = LangChainPineconeVectorStore.from_documents(
             documents,
             embeddings,  # embedding como segundo argumento posicional
             index_name=PINECONE_INDEX_NAME  # index_name como kwarg
