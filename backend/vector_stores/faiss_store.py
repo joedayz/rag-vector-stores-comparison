@@ -4,7 +4,7 @@ Implementación de FAISS vector store
 from pathlib import Path
 from typing import List
 from langchain_community.vectorstores.faiss import FAISS
-from langchain.schema import Document
+from langchain_core.documents import Document
 from .base import VectorStoreBase
 from config import FAISS_VECTORSTORE_PATH, EMBEDDING_MODEL
 from langchain_huggingface import HuggingFaceEmbeddings

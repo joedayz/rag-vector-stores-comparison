@@ -3,7 +3,7 @@ Implementación de Weaviate vector store
 """
 from typing import List
 from langchain_weaviate import WeaviateVectorStore as LangChainWeaviateVectorStore
-from langchain.schema import Document
+from langchain_core.documents import Document
 from .base import VectorStoreBase
 from config import (
     WEAVIATE_URL,

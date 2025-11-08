@@ -4,7 +4,7 @@ Define la interfaz común que todos los vector stores deben implementar
 """
 from abc import ABC, abstractmethod
 from typing import List, Any
-from langchain.schema import Document
+from langchain_core.documents import Document
 
 class VectorStoreBase(ABC):
     """Clase base abstracta para vector stores"""

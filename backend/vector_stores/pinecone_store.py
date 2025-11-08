@@ -4,7 +4,7 @@ Implementación de Pinecone vector store
 import os
 from typing import List
 from langchain_pinecone import PineconeVectorStore
-from langchain.schema import Document
+from langchain_core.documents import Document
 from .base import VectorStoreBase
 from config import (
     PINECONE_API_KEY,
