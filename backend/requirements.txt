@@ -1,0 +1,31 @@
+# Dependencias base
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# LangChain
+langchain>=0.1.0
+langchain-community>=0.0.20
+langchain-huggingface>=0.0.1
+langchain-text-splitters>=0.0.1
+
+# Embeddings
+sentence-transformers>=2.2.0
+torch>=2.0.0
+
+# Vector Stores (instalar según necesidad)
+# FAISS (local)
+faiss-cpu>=1.7.4
+
+# Pinecone (cloud) - descomentar si usas Pinecone
+# langchain-pinecone>=0.0.1
+# pinecone-client>=3.0.0
+
+# Weaviate (cloud o local) - descomentar si usas Weaviate
+# langchain-weaviate>=0.0.1
+# weaviate-client>=4.0.0
+
+# OpenAI (opcional)
+openai>=1.0.0
+

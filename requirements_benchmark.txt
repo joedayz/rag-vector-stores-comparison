@@ -1,0 +1,30 @@
+# Dependencias para el script de benchmarking
+# Incluye todas las librerías necesarias para FAISS, Pinecone y Weaviate
+
+# Core dependencies
+python-dotenv>=1.0.0
+
+# LangChain core
+langchain>=0.1.0
+langchain-community>=0.0.20
+langchain-huggingface>=0.0.1
+langchain-text-splitters>=0.0.1
+
+# FAISS
+faiss-cpu>=1.7.4
+
+# Pinecone
+langchain-pinecone>=0.0.1
+pinecone-client>=3.0.0
+
+# Weaviate
+langchain-weaviate>=0.0.1
+weaviate-client>=4.0.0
+
+# Embeddings
+sentence-transformers>=2.2.0
+torch>=2.0.0
+
+# Utilities
+pydantic>=2.0.0
+

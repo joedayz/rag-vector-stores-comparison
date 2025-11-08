@@ -1,0 +1,55 @@
+# Variables de entorno y secretos (CRÍTICO - nunca subir)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Entorno virtual de Python
+venv/
+env/
+ENV/
+.venv/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Archivos de FAISS (ya no se usan, ahora usamos Pinecone)
+vector_store/
+*.faiss
+*.pkl
+vectorstore.pkl
+
+# Archivos de sistema
+.DS_Store
+.DS_Store?
+._*
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+
+# Archivos de testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Archivos de mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
