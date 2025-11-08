@@ -26,8 +26,8 @@ Sistema de RAG (Retrieval Augmented Generation) que permite comparar diferentes 
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone <tu-repositorio>
-cd rags
+git clone https://github.com/joedayz/rag-vector-stores-comparison.git
+cd rag-vector-stores-comparison
 ```
 
 ### 2. Configurar Backend
