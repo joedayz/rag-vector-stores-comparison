@@ -92,8 +92,18 @@ Para consultas específicas sobre tu caso particular, te recomiendo contactar di
             "vector_store": VECTOR_STORE_TYPE.value
         }
         
+    except ValueError as e:
+        # Errores de configuración o vectorstore no disponible
+        raise HTTPException(
+            status_code=503,
+            detail=f"Error de configuración: {str(e)}. Verifica tu configuración de {VECTOR_STORE_TYPE.value} y ejecuta 'python ingest.py' primero."
+        )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al procesar la consulta: {str(e)}")
+        # Otros errores
+        import traceback
+        error_detail = f"Error al procesar la consulta: {str(e)}"
+        print(f"❌ Error completo: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @app.get("/search")
 async def search(query: str = Query(..., description="Consulta a buscar")):

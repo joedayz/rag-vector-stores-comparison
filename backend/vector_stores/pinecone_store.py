@@ -28,20 +28,51 @@ class PineconeVectorStore(VectorStoreBase):
     def _connect(self):
         """Conecta a Pinecone"""
         try:
+            # Verificar si el índice existe
+            pc = Pinecone(api_key=PINECONE_API_KEY)
+            index_names = [index.name for index in pc.list_indexes()]
+            
+            if PINECONE_INDEX_NAME not in index_names:
+                print(f"⚠️  El índice '{PINECONE_INDEX_NAME}' no existe en Pinecone.")
+                print(f"   Ejecuta 'python ingest.py' primero para crear el índice y cargar los datos.")
+                self.vectordb = None
+                return
+            
+            # Intentar conectar al índice
             self.vectordb = PineconeVectorStore(
                 index_name=PINECONE_INDEX_NAME,
                 embedding=self.embeddings
             )
-            print(f"✅ Conectado a Pinecone (índice: {PINECONE_INDEX_NAME})")
+            
+            # Verificar si el índice tiene datos
+            try:
+                # Intentar una búsqueda simple para verificar que hay datos
+                stats = pc.describe_index(PINECONE_INDEX_NAME)
+                print(f"✅ Conectado a Pinecone (índice: {PINECONE_INDEX_NAME})")
+                print(f"   Dimensiones: {stats.dimension}, Métrica: {stats.metric}")
+            except Exception as stats_error:
+                print(f"⚠️  Advertencia al verificar estadísticas del índice: {stats_error}")
+            
         except Exception as e:
-            print(f"⚠️  Error conectando a Pinecone: {e}")
+            print(f"❌ Error conectando a Pinecone: {e}")
+            print(f"   Verifica tu API key y que el índice '{PINECONE_INDEX_NAME}' exista.")
+            print(f"   Ejecuta 'python ingest.py' primero para crear el índice y cargar los datos.")
             self.vectordb = None
     
     def similarity_search(self, query: str, k: int = 3) -> List[Document]:
         """Busca documentos similares"""
         if self.vectordb is None:
-            raise ValueError("No se pudo conectar a Pinecone. Verifica tu configuración.")
-        return self.vectordb.similarity_search(query, k=k)
+            raise ValueError(
+                f"No se pudo conectar a Pinecone o el índice '{PINECONE_INDEX_NAME}' no existe. "
+                f"Ejecuta 'python ingest.py' primero para crear el índice y cargar los datos."
+            )
+        try:
+            return self.vectordb.similarity_search(query, k=k)
+        except Exception as e:
+            raise ValueError(
+                f"Error al buscar en Pinecone: {str(e)}. "
+                f"Verifica que el índice '{PINECONE_INDEX_NAME}' tenga datos cargados."
+            )
     
     def from_documents(self, documents: List[Document], embeddings=None) -> None:
         """Crea el vectorstore a partir de documentos"""
