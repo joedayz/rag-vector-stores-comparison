@@ -41,7 +41,7 @@ class PineconeVectorStore(VectorStoreBase):
             # Intentar conectar al índice
             self.vectordb = PineconeVectorStore(
                 index_name=PINECONE_INDEX_NAME,
-                embeddings=self.embeddings
+                embedding=self.embeddings
             )
             
             # Verificar si el índice tiene datos
@@ -101,7 +101,7 @@ class PineconeVectorStore(VectorStoreBase):
         # Crear vectorstore en Pinecone
         self.vectordb = PineconeVectorStore.from_documents(
             documents=documents,
-            embeddings=embeddings,
+            embedding=embeddings,
             index_name=PINECONE_INDEX_NAME
         )
         print(f"✅ Vectorstore Pinecone creado (índice: {PINECONE_INDEX_NAME})")
