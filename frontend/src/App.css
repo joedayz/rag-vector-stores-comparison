@@ -50,7 +50,8 @@ body {
   padding: 2rem;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  min-height: calc(100vh - 200px);
 }
 
 .chat-container {
@@ -61,6 +62,7 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   max-width: 800px;
   width: 100%;
+  margin: 0 auto;
 }
 
 /* Form styles */
