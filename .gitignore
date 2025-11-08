@@ -14,8 +14,6 @@ ENV/
 .env
 .env.local
 .env.*.local
-# Ignorar .env en repos antiguos también
-afp-chatbot-rag-langchain-*/backend/.env
 
 # Vector stores
 backend/vector_stores_data/

@@ -1,6 +1,6 @@
 # RAG Chatbot - Comparativa de Vector Stores
 
-Sistema de RAG (Retrieval Augmented Generation) que permite comparar diferentes vector stores: **FAISS** (local), **Pinecone** (cloud) y **Weaviate** (cloud o local).
+Sistema de RAG (Retrieval Augmented Generation) unificado que permite comparar diferentes vector stores: **FAISS** (local), **Pinecone** (cloud) y **Weaviate** (cloud o local).
 
 ## 🎯 Características
 
@@ -53,28 +53,34 @@ pip install langchain-weaviate weaviate-client
 
 ### 3. Configurar Variables de Entorno
 
-Crear archivo `.env` en `backend/`:
+Crear archivo `.env` en `backend/` (puedes copiar `env.example`):
 
+```bash
+cp env.example .env
+# Edita .env con tus configuraciones
+```
+
+**Configuración mínima para cada vector store:**
+
+#### FAISS (Local)
 ```env
-# Vector Store a usar: faiss, pinecone, weaviate
 VECTOR_STORE_TYPE=faiss
+OPENAI_API_KEY=opcional
+```
 
-# Configuración común
-OPENAI_API_KEY=tu_api_key_opcional
-EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-
-# Configuración del servidor
-HOST=localhost
-PORT=8000
-
-# Configuración de Pinecone (solo si VECTOR_STORE_TYPE=pinecone)
+#### Pinecone (Cloud)
+```env
+VECTOR_STORE_TYPE=pinecone
 PINECONE_API_KEY=tu_pinecone_api_key
-PINECONE_ENVIRONMENT=us-east-1-aws
 PINECONE_INDEX_NAME=afp-chatbot
+PINECONE_ENVIRONMENT=us-east-1-aws
+```
 
-# Configuración de Weaviate (solo si VECTOR_STORE_TYPE=weaviate)
-WEAVIATE_URL=http://localhost:8080
-WEAVIATE_API_KEY=opcional
+#### Weaviate (Cloud o Local)
+```env
+VECTOR_STORE_TYPE=weaviate
+WEAVIATE_URL=http://localhost:8080  # o URL de cloud
+WEAVIATE_API_KEY=opcional  # solo para cloud
 WEAVIATE_INDEX_NAME=AFP_Chatbot
 ```
 
@@ -116,7 +122,7 @@ Abre tu navegador en `http://localhost:5173` (o el puerto que Vite indique).
 
 Para cambiar entre diferentes vector stores:
 
-1. **Edita `.env`** y cambia `VECTOR_STORE_TYPE`:
+1. **Edita `.env`** en `backend/` y cambia `VECTOR_STORE_TYPE`:
    ```env
    VECTOR_STORE_TYPE=faiss      # Para FAISS local
    VECTOR_STORE_TYPE=pinecone  # Para Pinecone cloud
@@ -145,22 +151,23 @@ cd scripts
 python benchmark.py
 ```
 
+**Nota**: Asegúrate de tener datos ingeridos en cada vector store que quieras comparar. Puedes cambiar `VECTOR_STORE_TYPE` en `.env` y ejecutar `ingest.py` para cada uno.
+
 El script:
 - Prueba cada vector store configurado
 - Mide tiempos de búsqueda
 - Genera un reporte comparativo
 
-**Nota**: Asegúrate de tener datos ingeridos en cada vector store que quieras comparar.
-
 ## 📁 Estructura del Proyecto
 
 ```
-rags/
+rag-vector-stores-comparison/
 ├── backend/
 │   ├── main.py                    # FastAPI app unificada
 │   ├── ingest.py                   # Script de ingest unificado
 │   ├── config.py                   # Configuración centralizada
 │   ├── requirements.txt            # Dependencias Python
+│   ├── env.example                 # Ejemplo de configuración
 │   ├── data/                       # Documentos a indexar
 │   │   └── data1.txt
 │   ├── vector_stores_data/         # Vectorstores generados (FAISS)
@@ -179,14 +186,13 @@ rags/
 │   └── package.json
 │
 ├── scripts/
-│   └── benchmark.py               # Script de benchmarking
+│   └── benchmark.py                # Script de benchmarking
 │
-└── docs/
-    ├── COMPARATIVA_VECTOR_STORES.md
-    └── SETUP_*.md                  # Guías de setup específicas
+├── README.md                       # Este archivo
+└── COMPARATIVA_VECTOR_STORES.md    # Comparativa detallada
 ```
 
-## 🔧 Configuración Detallada
+## 🔧 Configuración Detallada por Vector Store
 
 ### FAISS (Local)
 
@@ -204,6 +210,12 @@ rags/
 **Setup:**
 ```env
 VECTOR_STORE_TYPE=faiss
+```
+
+**Instalación:**
+```bash
+# FAISS ya está incluido en requirements.txt
+pip install -r requirements.txt
 ```
 
 ### Pinecone (Cloud)
@@ -227,7 +239,16 @@ PINECONE_INDEX_NAME=afp-chatbot
 PINECONE_ENVIRONMENT=us-east-1-aws
 ```
 
-Ver [docs/SETUP_PINECONE.md](docs/SETUP_PINECONE.md) para más detalles.
+**Instalación:**
+```bash
+pip install langchain-pinecone pinecone-client
+```
+
+**Primera vez:**
+1. Crea una cuenta en [Pinecone](https://www.pinecone.io/)
+2. Obtén tu API key
+3. Configura `.env` con tus credenciales
+4. Ejecuta `ingest.py` (creará el índice automáticamente)
 
 ### Weaviate (Cloud o Local)
 
@@ -241,21 +262,38 @@ Ver [docs/SETUP_PINECONE.md](docs/SETUP_PINECONE.md) para más detalles.
 - ❌ Setup más complejo
 - ❌ Curva de aprendizaje
 
-**Setup:**
+**Setup Local:**
 ```env
 VECTOR_STORE_TYPE=weaviate
-WEAVIATE_URL=http://localhost:8080  # o URL de cloud
-WEAVIATE_API_KEY=opcional
+WEAVIATE_URL=http://localhost:8080
 WEAVIATE_INDEX_NAME=AFP_Chatbot
 ```
 
-Ver [docs/SETUP_WEAVIATE.md](docs/SETUP_WEAVIATE.md) para más detalles.
+**Setup Cloud:**
+```env
+VECTOR_STORE_TYPE=weaviate
+WEAVIATE_URL=https://tu-cluster.weaviate.network
+WEAVIATE_API_KEY=tu_api_key
+WEAVIATE_INDEX_NAME=AFP_Chatbot
+```
 
-## 📚 Documentación
+**Instalación:**
+```bash
+pip install langchain-weaviate weaviate-client
+```
 
-- [Comparativa de Vector Stores](COMPARATIVA_VECTOR_STORES.md) - Análisis detallado
-- [Guía de Benchmarking](README_BENCHMARK.md) - Cómo usar el benchmark
-- [Recomendación de Estructura](RECOMENDACION_ESTRUCTURA.md) - Por qué un solo repo
+**Primera vez (Local):**
+1. Instala Docker
+2. Ejecuta: `docker run -d -p 8080:8080 semitechnologies/weaviate:latest`
+3. Configura `.env` con `WEAVIATE_URL=http://localhost:8080`
+4. Ejecuta `ingest.py`
+
+**Primera vez (Cloud):**
+1. Crea una cuenta en [Weaviate Cloud](https://weaviate.io/developers/weaviate-cloud)
+2. Crea un cluster
+3. Obtén la URL y API key
+4. Configura `.env` con tus credenciales
+5. Ejecuta `ingest.py`
 
 ## 🐛 Troubleshooting
 
@@ -285,15 +323,9 @@ pip install langchain-pinecone pinecone-client
 pip install langchain-weaviate weaviate-client
 ```
 
-## 🤝 Contribuir
+## 📚 Documentación Adicional
 
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+- [Comparativa Detallada de Vector Stores](COMPARATIVA_VECTOR_STORES.md) - Análisis completo de FAISS, Pinecone y Weaviate
 
 ## 📄 Licencia
 
@@ -304,4 +336,3 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 - LangChain por el framework
 - FAISS, Pinecone y Weaviate por los vector stores
 - La comunidad de código abierto
-
