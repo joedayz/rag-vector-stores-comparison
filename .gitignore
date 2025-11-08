@@ -49,3 +49,4 @@ htmlcov/
 # Documentation builds
 docs/_build/
 
+POST_BLOG.md
