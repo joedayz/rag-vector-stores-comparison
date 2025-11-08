@@ -141,22 +141,141 @@ Para cambiar entre diferentes vector stores:
    uvicorn main:app --reload
    ```
 
+## 🧪 Probar Cada Vector Store
+
+### Probar FAISS (Local)
+
+```bash
+cd backend
+source venv/bin/activate
+
+# 1. Configurar .env
+# VECTOR_STORE_TYPE=faiss
+
+# 2. Ingerir datos
+python ingest.py
+
+# 3. Probar (opción A: script de prueba)
+cd ../scripts
+python test_faiss.py
+
+# 3. Probar (opción B: servidor)
+cd ../backend
+uvicorn main:app --reload
+# Probar en http://localhost:8000 o desde frontend
+```
+
+### Probar Pinecone (Cloud)
+
+```bash
+cd backend
+source venv/bin/activate
+
+# 1. Instalar dependencias
+pip install langchain-pinecone pinecone-client
+
+# 2. Configurar .env
+# VECTOR_STORE_TYPE=pinecone
+# PINECONE_API_KEY=tu_api_key
+# PINECONE_INDEX_NAME=afp-chatbot-test
+
+# 3. Ingerir datos
+python ingest.py
+
+# 4. Probar
+cd ../scripts
+python test_pinecone.py
+```
+
+### Probar Weaviate (Local o Cloud)
+
+**Setup Local:**
+```bash
+# Iniciar Weaviate local con Docker
+docker run -d \
+  --name weaviate \
+  -p 8080:8080 \
+  -e AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true \
+  -e PERSISTENCE_DATA_PATH='/var/lib/weaviate' \
+  -e DEFAULT_VECTORIZER_MODULE='none' \
+  semitechnologies/weaviate:latest
+```
+
+**Probar:**
+```bash
+cd backend
+source venv/bin/activate
+
+# 1. Instalar dependencias
+pip install langchain-weaviate weaviate-client
+
+# 2. Configurar .env
+# VECTOR_STORE_TYPE=weaviate
+# WEAVIATE_URL=http://localhost:8080  # o URL de cloud
+# WEAVIATE_API_KEY=opcional  # solo para cloud
+
+# 3. Ingerir datos
+python ingest.py
+
+# 4. Probar
+cd ../scripts
+python test_weaviate.py
+```
+
 ## 📊 Benchmarking
 
 Para comparar el rendimiento de los diferentes vector stores:
 
+### Opción 1: Benchmark Simplificado (Recomendado)
+
+Prueba cada vector store uno por uno:
+
 ```bash
-# Desde la raíz del proyecto
-cd scripts
-python benchmark.py
+cd backend
+source venv/bin/activate
+
+# 1. Probar FAISS
+# Editar .env: VECTOR_STORE_TYPE=faiss
+python ingest.py
+cd ../scripts
+python benchmark_simple.py
+
+# 2. Probar Pinecone
+# Editar .env: VECTOR_STORE_TYPE=pinecone
+cd ../backend
+python ingest.py
+cd ../scripts
+python benchmark_simple.py
+
+# 3. Probar Weaviate
+# Editar .env: VECTOR_STORE_TYPE=weaviate
+cd ../backend
+python ingest.py
+cd ../scripts
+python benchmark_simple.py
 ```
 
-**Nota**: Asegúrate de tener datos ingeridos en cada vector store que quieras comparar. Puedes cambiar `VECTOR_STORE_TYPE` en `.env` y ejecutar `ingest.py` para cada uno.
+### Opción 2: Scripts de Prueba Individuales
 
-El script:
-- Prueba cada vector store configurado
-- Mide tiempos de búsqueda
-- Genera un reporte comparativo
+```bash
+cd scripts
+
+# Probar FAISS
+python test_faiss.py
+
+# Probar Pinecone
+python test_pinecone.py
+
+# Probar Weaviate
+python test_weaviate.py
+```
+
+**Nota**: Asegúrate de tener datos ingeridos en cada vector store que quieras comparar. Cambia `VECTOR_STORE_TYPE` en `.env` y ejecuta `ingest.py` para cada uno.
+
+Los scripts:
+- Prueban cada vector store configurado
+- Miden tiempos de búsqueda
+- Generan reportes de rendimiento
 
 ## 📁 Estructura del Proyecto
 
