@@ -99,10 +99,11 @@ class PineconeVectorStore(VectorStoreBase):
             print(f"✅ Usando índice existente {PINECONE_INDEX_NAME}")
         
         # Crear vectorstore en Pinecone
+        # from_documents acepta embedding (singular) como segundo argumento posicional
         self.vectordb = PineconeVectorStore.from_documents(
-            documents=documents,
-            embedding=embeddings,
-            index_name=PINECONE_INDEX_NAME
+            documents,
+            embeddings,  # embedding como segundo argumento posicional
+            index_name=PINECONE_INDEX_NAME  # index_name como kwarg
         )
         print(f"✅ Vectorstore Pinecone creado (índice: {PINECONE_INDEX_NAME})")
     
